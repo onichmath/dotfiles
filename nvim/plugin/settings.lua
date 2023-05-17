@@ -1,15 +1,21 @@
 
--- Numbers and scrolloff
-vim.cmd[[set number]]
-vim.cmd[[set relativenumber]]
-vim.cmd[[set scrolloff=999]]
-vim.cmd[[set smartindent]]
+-- Cursor always is centered
+vim.o.scrolloff = 999
+
+--vim.o.smartindent = true
+
+-- Show line numbers
+vim.o.relativenumber = true
+
+-- Show line number for current line 
+vim.wo.number = true
 
 -- Set highlight on search
 vim.o.hlsearch = false
 
--- Make line numbers default
-vim.wo.number = true
+-- Highlight matches and some more logic. Default true
+vim.o.incsearch = true
+
 --Enable mouse mode
 --vim.o.mouse = 'a'
 
