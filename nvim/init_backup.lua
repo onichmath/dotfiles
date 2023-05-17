@@ -45,6 +45,9 @@ vim.cmd[[set number]]
 vim.cmd[[set relativenumber]]
 vim.cmd[[set scrolloff=999]]
 vim.cmd[[set smartindent]]
+-- Using lualine instead of winbar
+--vim.cmd[[set winbar=%=%m\ %f]]
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -96,7 +99,8 @@ require('lazy').setup({
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    -- Snips added, Require statement at around line 450
+    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets'},
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -132,6 +136,7 @@ require('lazy').setup({
         theme = 'onedark',
         component_separators = '|',
         section_separators = '',
+        path = 3,
       },
     },
   },
@@ -178,8 +183,8 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.debug',
 
   -- NOTE: The import below automatically adds your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
@@ -411,7 +416,13 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
-   pyright = {},
+   pyright = {
+    python = {
+      analysis = {
+        extraPaths = {"/home/matthewo/.local/bin/pybin/"}
+      }
+    }
+  },
    rust_analyzer = {},
   -- tsserver = {},
 
@@ -455,6 +466,8 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
 luasnip.config.setup {}
+-- Require statement for snippets. TODO: Customizje 
+require("luasnip.loaders.from_vscode").lazy_load()
 
 cmp.setup {
   snippet = {
@@ -463,6 +476,8 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
